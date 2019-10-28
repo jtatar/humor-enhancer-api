@@ -9,6 +9,11 @@ require('dotenv').config();
 
 const register = require('./controllers/register');
 
+const db = knex({
+    client: 'pg',
+    connection: process.env.POSTGRES_URI
+});
+
 const app = express();
 
 app.use(morgan('combined'));

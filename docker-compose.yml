@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  # Backend API
+  polsl-tai-api:
+    container_name: tai-backend
+    build: ./
+    command: npm start
+    working_dir: /usr/src/polsl-tai-api
+    environment:
+      POSTGRES_URI: postgres://test:secret@postgres:5432/polsl-tai-docker
+      REDIS_URI: redis://redis:6379
+    ports: 
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/polsl-tai-api
+
+  # Postgres
+  postgres:
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: polsl-tai-docker
+      POSTGRES_HOST: postgres
+    build: ./postgres
+    ports:
+      - "5432:5432"
+
+  # Redis
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
