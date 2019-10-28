@@ -5,6 +5,9 @@ const cors = require('cors');
 const knex = require('knex');
 const morgan = require('morgan');
 const helmet = require('helmet');
+require('dotenv').config();
+
+const register = require('./controllers/register');
 
 const app = express();
 
@@ -13,7 +16,8 @@ app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => { res.send("ITS WORKING") })
+app.get('/', (req, res) => { res.send('its working') })
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 
 app.listen(3000, ()=> {
     console.log('app is running on port 3000');
