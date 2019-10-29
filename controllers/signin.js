@@ -1,3 +1,5 @@
+const redis = require('redis');
+const redisClient = redis.createClient(process.env.REDIS_URI);
 const jwt = require('jsonwebtoken');
 
 const getAuthTokenId = (req, res) => {
@@ -32,13 +34,13 @@ const signInAuthentication = (db, bcrypt, req, res) => {
 }
 
 const createSessions = (data) => {
-    const {email, id} = user;
+    const {email, id} = data;
     const token = signToken(email);
     return setToken(token, id)
         .then(() => {
             return { success: 'true', userId: id, token }
         })
-        .catch(console.log)
+        .catch("Create session error")
 }
 
 const signToken = (email) => {
@@ -50,7 +52,7 @@ const setToken = (key, value) => {
     return Promise.resolve(redisClient.set(key, value))
 }
 
-const handleSignin = (req, res, db, bcrypt, redisClient) => {
+const handleSignin = (req, res, db, bcrypt) => {
     const { authorization } = req.headers;
     return authorization ?
         getAuthTokenId(req, res) :

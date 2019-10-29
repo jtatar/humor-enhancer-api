@@ -5,18 +5,17 @@ const cors = require('cors');
 const knex = require('knex');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const redis = require('redis');
 require('dotenv').config();
 
 const auth = require('./controllers/authorization');
 const register = require('./controllers/register');
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
 
 const db = knex({
     client: 'pg',
     connection: process.env.POSTGRES_URI
 });
-
-const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const app = express();
 
@@ -26,8 +25,8 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => { res.send('its working') })
-app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt, redisClient)})
-app.post('/signin', (req,res) => {signin.handleSignin(req, res, db, bcrypt, redisClient)})
+app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)})
+app.post('/signin', (req,res) => {signin.handleSignin(req, res, db, bcrypt)})
 app.get('/profile/:id', auth.requireAuth, (req,res) => {profile.handleProfileGet(req, res, db)})
 
 app.listen(3000, ()=> {

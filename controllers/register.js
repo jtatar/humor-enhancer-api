@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
+const redis = require('redis');
+const redisClient = redis.createClient(process.env.REDIS_URI);
 
-const createSession = (user, redisClient) => {
+const createSession = (user) => {
     const { email, id } = user;
     const token = signToken(email);
-    return setToken(token, id, redisClient)
+    return setToken(token, id)
         .then(() => {
             return {success: 'true', userId: id, token}
         })
-        .catch(console.log)
+        .catch("create session error")
 }
 
 const signToken = (email) => {
@@ -15,11 +17,11 @@ const signToken = (email) => {
     return jwt.sign({jwtPayload},process.env.REACT_APP_JWT_SECRET);
 }
 
-const setToken = (key, value, redisClient) => {
+const setToken = (key, value) => {
     return Promise.resolve(redisClient.set(key, value));
 }
 
-const handleRegister = (req, res, db, bcrypt, redisClient) => {
+const handleRegister = (req, res, db, bcrypt) => {
     const { name, surname, email, age, password } = req.body;
     if(!email || !name || !surname || !age || !password){
         return res.status(400).json('Incorect form submission');
@@ -43,7 +45,7 @@ const handleRegister = (req, res, db, bcrypt, redisClient) => {
                 age: age
             })
             .then(user => {
-                return createSession(user[0], redisClient);
+                return createSession(user[0]);
             })
             .then(session => res.json(session))
         })
