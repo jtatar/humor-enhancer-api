@@ -7,6 +7,7 @@ const createSession = (user) => {
     const token = signToken(email);
     return setToken(token, id)
         .then(() => {
+            console.log(`Creating session for: ${email}`);
             return {success: 'true', userId: id, token}
         })
         .catch("create session error")
@@ -52,7 +53,7 @@ const handleRegister = (req, res, db, bcrypt) => {
         .then(trx.commit)
         .catch(trx.rollback)
     })
-    .catch(err => res.status(400).json('Unable to register'))
+    .catch(err => res.status(400).json(`Unable to register ${err}`))
 }
 
 module.exports = {
