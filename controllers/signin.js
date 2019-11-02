@@ -3,14 +3,14 @@ const redisClient = redis.createClient(process.env.REDIS_URI);
 const jwt = require('jsonwebtoken');
 
 const getAuthTokenId = (req, res) => {
-    const { authorization } = req.headers
-    return redisClient.get(authorization, (err, reply => {
-        if(err || !reply){
-            return res.status(400).json('Unauthorized');
-        }
-        return res.json({id:reply});
-    }))
-}
+    const { authorization } = req.headers;
+    return redisClient.get(authorization, (err, reply) => {
+      if (err || !reply ){
+        return res.status(400).json('Unauthorized');
+      } 
+      return res.json({id:reply});
+    })
+  }
 
 const signInAuthentication = (db, bcrypt, req, res) => {
     const { email, password } = req.body;
