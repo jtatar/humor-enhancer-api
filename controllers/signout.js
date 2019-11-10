@@ -1,6 +1,5 @@
-const redis = require('redis');
 
-//setup redis
+const redis = require('redis');
 const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const handleSignout = (req, res) => {
