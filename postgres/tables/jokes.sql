@@ -5,7 +5,8 @@ CREATE TABLE jokes (
     type VARCHAR(10),
     joke text,
     setup text,
-    delivery text
+    delivery text,
+    category VARCHAR(20)
 );
 
 COMMIT;
