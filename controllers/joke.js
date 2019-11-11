@@ -37,8 +37,30 @@ const saveJoke = (data, db) => {
     .catch(err => console.log(`Joke already exists, error: ${err}`));
 }
 
+const handleJokePost = (req, res, db) => {
+    const { jokeid, userid } = req.body;
+    db.transaction(trx => {
+        db.select('*')
+        .from('favourites')
+        .where('userid', userid).andWhere('jokeid', jokeid)
+        .then(el => {
+            if(el.length === 0){
+                trx.insert({
+                    jokeid: jokeid,
+                    userid: userid
+                })
+                .into('favourites')
+                .then(trx.commit)
+                .catch(trx.rollback)
+            }
+        })
+    })
+    .catch(err => res.status(400).json(`Couldn't set joke to favourites`));
+}
+
 
 
 module.exports = {
-    handleJokeGet: handleJokeGet
+    handleJokeGet: handleJokeGet,
+    handleJokePost: handleJokePost
 }

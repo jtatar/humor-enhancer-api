@@ -31,6 +31,7 @@ app.get('/', (req, res) => { res.send('its working') });
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
 app.post('/signin', (req,res) => {signin.handleSignin(req, res, db, bcrypt)});
 app.post('/signout', auth.requireAuth, (req, res) => {signout.handleSignout(req, res)});
+app.post('/joke', auth.requireAuth, (req,res) => {joke.handleJokePost(req, res, db)});
 app.get('/profile/:id', auth.requireAuth, (req,res) => {profile.handleProfileGet(req, res, db)});
 app.get('/joke', auth.requireAuth, (req,res) => {joke.handleJokeGet(req, res, db)});
 
