@@ -12,6 +12,19 @@ const handleFavouriteGet = (req, res ,db) =>{
     .catch(err => res.status(400).json('Error getting jokes from favourites'))
 }
 
+const handleFavourites = (req, res, db) => {
+    const { favourites } = req.body;
+    getJokes(favourites, db)
+    .then(jokes => res.json({jokes:jokes})); 
+}
+
+const getJokes = (favourites, db) => {
+    return db.select('*').from('jokes')
+        .whereIn('id', favourites)
+        .catch(err => console.log('Unable to get joke'))
+}
+
 module.exports = {
-    handleFavouriteGet: handleFavouriteGet
+    handleFavouriteGet: handleFavouriteGet,
+    handleFavourites: handleFavourites
 }
