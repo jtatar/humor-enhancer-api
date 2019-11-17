@@ -12,6 +12,19 @@ const handleFavouriteGet = (req, res ,db) =>{
     .catch(err => res.status(400).json('Error getting jokes from favourites'))
 }
 
+const handleFavouriteDelete = (req, res, db) => {
+    const { userid, jokeid } = req.body;
+    db.transaction(trx => {
+       trx.delete()
+       .from('favourites')
+       .where('userid', userid)
+       .andWhere('jokeid', jokeid)
+       .then(trx.commit)
+       .catch(trx.rollback)
+    })
+    .catch(err => res.status(400).json('Unable to delete favourite joke'))
+}
+
 const handleFavourites = (req, res, db) => {
     const { favourites } = req.body;
     getJokes(favourites, db)
@@ -26,5 +39,6 @@ const getJokes = (favourites, db) => {
 
 module.exports = {
     handleFavouriteGet: handleFavouriteGet,
-    handleFavourites: handleFavourites
+    handleFavourites: handleFavourites,
+    handleFavouriteDelete: handleFavouriteDelete
 }
