@@ -1,5 +1,5 @@
 const redis = require('redis');
-const redisClient = redis.createClient(process.env.REDIS_URI);
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const requireAuth = (req, res, next) => {
     const { authorization } = req.headers;
