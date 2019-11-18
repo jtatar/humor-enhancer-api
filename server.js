@@ -39,6 +39,6 @@ app.get('/joke', auth.requireAuth, (req,res) => {joke.handleJokeGet(req, res, db
 app.get('/favourite/:id', auth.requireAuth, (req,res) => {favourite.handleFavouriteGet(req, res, db)});
 app.post('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavourites(req, res, db)});
 app.delete('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavouriteDelete(req, res, db)})
-app.listen(3000, ()=> {
-    console.log('app is running on port 3000');
+app.listen(process.env.PORT || 3000, ()=> {
+    console.log(`app is running on port ${process.env.PORT}`);
 })
