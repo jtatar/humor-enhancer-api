@@ -34,6 +34,7 @@ app.post('/signin', (req,res) => {signin.handleSignin(req, res, db, bcrypt)});
 app.post('/signout', auth.requireAuth, (req, res) => {signout.handleSignout(req, res)});
 app.post('/joke', auth.requireAuth, (req,res) => {joke.handleJokePost(req, res, db)});
 app.get('/profile/:id', auth.requireAuth, (req,res) => {profile.handleProfileGet(req, res, db)});
+app.post('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileUpdate(req, res, db)})
 app.get('/joke', auth.requireAuth, (req,res) => {joke.handleJokeGet(req, res, db)});
 app.get('/favourite/:id', auth.requireAuth, (req,res) => {favourite.handleFavouriteGet(req, res, db)});
 app.post('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavourites(req, res, db)});
