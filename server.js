@@ -19,7 +19,7 @@ const favourite = require('./controllers/favourite');
 const db = knex({
     client: 'pg',
     connection: {
-       connectString: process.env.POSTGRES_URL,
+       connectionString: process.env.POSTGRES_URL,
        ssl: true,
     }
 });
