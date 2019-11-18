@@ -4,37 +4,54 @@ const handleJokeGet = (req, res, db) => {
     fetch('https://sv443.net/jokeapi/category/Any')
     .then(resp => resp.json())
     .then(data => {
-        res.json(data);
-        saveJoke(data, db);
+        if(data.id && data.type){
+            saveJoke(data, db);
+            res.json(data);
+        } else{
+            console.log(data);
+            res.status(400).json(`Couldn't handle joke get`);
+        }
     })
+    .catch(err => console.log(`coudlnt do jokeget ${err}`))
 }
 
 const saveJoke = (data, db) => {
     db.transaction(trx => {
-        if(data.type==='single'){
-            trx.insert({
-                id: data.id,
-                type: data.type,
-                joke: data.joke,
-                category: data.category
-            })
-            .into('jokes')
-            .then(trx.commit)
-            .catch(trx.rollback)
-        } else if(data.type==='twopart') {
-            trx.insert({
-                id:data.id,
-                type: data.type,
-                category: data.category,
-                setup: data.setup,
-                delivery: data.delivery
-            })
-            .into('jokes')
-            .then(trx.commit)
-            .catch(trx.rollback)
-        }
+        db.select('*')
+        .from('jokes')
+        .where('id',data.id)
+        .then(el => {
+            if(el.length===0){
+                if(data.type==='single'){
+                    trx.insert({
+                        id: data.id,
+                        type: data.type,
+                        joke: data.joke,
+                        category: data.category
+                    })
+                    .into('jokes')
+                    .then(trx.commit)
+                    .catch(trx.rollback)
+                } else if(data.type==='twopart') {
+                    trx.insert({
+                        id:data.id,
+                        type: data.type,
+                        category: data.category,
+                        setup: data.setup,
+                        delivery: data.delivery
+                    })
+                    .into('jokes')
+                    .then(trx.commit)
+                    .catch(trx.rollback)
+                }
+            } else{
+                return Promise.reject('Couldnt get joke')
+                .then(trx.commit)
+                .catch(trx.rollback)
+            }
+        })
     })
-    .catch(err => console.log(`Joke already exists, error: ${err}`));
+    .catch(err => console.log('Couldnt save joke'));
 }
 
 const handleJokePost = (req, res, db) => {
@@ -50,6 +67,10 @@ const handleJokePost = (req, res, db) => {
                     userid: userid
                 })
                 .into('favourites')
+                .then(trx.commit)
+                .catch(trx.rollback)
+            } else {
+                return Promise.reject('Couldnt save joke')
                 .then(trx.commit)
                 .catch(trx.rollback)
             }

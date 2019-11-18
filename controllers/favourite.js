@@ -22,6 +22,7 @@ const handleFavouriteDelete = (req, res, db) => {
        .then(trx.commit)
        .catch(trx.rollback)
     })
+    .then(res.status(200).json('Deleted joke from favourites'))
     .catch(err => res.status(400).json('Unable to delete favourite joke'))
 }
 
