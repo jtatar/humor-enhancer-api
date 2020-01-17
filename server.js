@@ -14,14 +14,12 @@ const profile = require('./controllers/profile');
 const signout = require('./controllers/signout');
 const joke = require('./controllers/joke');
 const favourite = require('./controllers/favourite');
+const likes = require('./controllers/likes');
 
 
 const db = knex({
     client: 'pg',
-    connection: {
-       connectionString: process.env.DATABASE_URL,
-       ssl: true,
-    }
+    connection: process.env.POSTGRES_URI
 });
 
 const app = express();
@@ -42,6 +40,7 @@ app.get('/joke', auth.requireAuth, (req,res) => {joke.handleJokeGet(req, res, db
 app.get('/favourite/:id', auth.requireAuth, (req,res) => {favourite.handleFavouriteGet(req, res, db)});
 app.post('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavourites(req, res, db)});
 app.delete('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavouriteDelete(req, res, db)})
-app.listen(process.env.PORT || 3000, ()=> {
+app.get('/likes/:jokeid', auth.requireAuth, (req, res) =>{likes.handleLikesGet(req, res, db)})
+app.listen(3000, ()=> {
     console.log(`app is running on port ${process.env.PORT}`);
 })
