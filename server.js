@@ -15,6 +15,8 @@ const signout = require('./controllers/signout');
 const joke = require('./controllers/joke');
 const favourite = require('./controllers/favourite');
 const likes = require('./controllers/likes');
+const user = require('./controllers/user');
+const userprofile = require('./controllers/userprofile')
 
 
 const db = knex({
@@ -37,10 +39,12 @@ app.post('/joke', auth.requireAuth, (req,res) => {joke.handleJokePost(req, res, 
 app.get('/profile/:id', auth.requireAuth, (req,res) => {profile.handleProfileGet(req, res, db)});
 app.post('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileUpdate(req, res, db)})
 app.get('/joke', auth.requireAuth, (req,res) => {joke.handleJokeGet(req, res, db)});
-app.get('/favourite/:id', auth.requireAuth, (req,res) => {favourite.handleFavouriteGet(req, res, db)});
+app.get('/favourite/:id', auth.notStrictRequireAuth, (req,res) => {favourite.handleFavouriteGet(req, res, db)});
 app.post('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavourites(req, res, db)});
 app.delete('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavouriteDelete(req, res, db)})
 app.get('/likes/:jokeid', auth.requireAuth, (req, res) =>{likes.handleLikesGet(req, res, db)})
+app.get('/user/:surname', auth.requireAuth, (req, res) =>{user.handleUserSearch(req, res, db)})
+app.get('/userprofile/:id', auth.notStrictRequireAuth, (req, res) =>{userprofile.handleProfileGet(req, res, db)})
 app.listen(3000, ()=> {
     console.log(`app is running on port ${process.env.PORT}`);
 })
