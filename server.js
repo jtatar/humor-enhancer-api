@@ -48,6 +48,6 @@ app.delete('/favourite', auth.requireAuth, (req, res) => {favourite.handleFavour
 app.get('/likes/:jokeid', auth.requireAuth, (req, res) =>{likes.handleLikesGet(req, res, db)})
 app.get('/user/:surname', auth.requireAuth, (req, res) =>{user.handleUserSearch(req, res, db)})
 app.get('/userprofile/:id', auth.notStrictRequireAuth, (req, res) =>{userprofile.handleProfileGet(req, res, db)})
-app.listen(3000, ()=> {
+app.listen(process.env.PORT || 3000, ()=> {
     console.log(`app is running on port ${process.env.PORT}`);
 })
