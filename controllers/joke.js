@@ -75,6 +75,7 @@ const handleJokePost = (req, res, db) => {
                 .catch(trx.rollback)
             }
         })
+        .then(res.status(200).json('Joke added to favs'))
     })
     .catch(err => res.status(400).json(`Couldn't set joke to favourites`));
 }
