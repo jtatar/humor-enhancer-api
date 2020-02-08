@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 const handleJokeGet = (req, res, db) => {
-    fetch('https://sv443.net/jokeapi/category/Any')
+    fetch('https://sv443.net/jokeapi/v2/joke/Any')
     .then(resp => resp.json())
     .then(data => {
         if(data.id && data.type){
