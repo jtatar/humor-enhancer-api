@@ -1,8 +1,16 @@
-# Projekt TAI - API
-How to start the app:
+# Humor Enhancer API
 
-1. Clone this repo
-2. Run `npm install`
+![HumorEnhancer](https://jtatar.github.io/portfolio/static/media/jokes.c85b3d3c.png)
+
+## Used technologies:
+
+* Docker
+* Redis
+* Express.js
+* PostgreSQL
+* Knex.js
+
+## Instalation
 
 Install docker
 1. Run docker-compose up --build
